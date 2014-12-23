@@ -47,7 +47,6 @@ VERSION_DELEMITER = "_"
 log = Logger()
 storage = Service("storage")
 locator = Locator()
-locator.connect("localhost", 10053, 120, False)
 
 LOGS_NAMESPACE = "flow_upload_logs"
 HOSTS_NAMESPACE = "flow_hosts"
@@ -324,7 +323,11 @@ def group_popapp(info, response):
 @asynchronous
 def group_refresh(name, response):
     try:
-        yield group.Refresh(locator, storage, name).execute()
+        hosts = yield hostdb.hosts()
+        for host in hosts:
+            l = Locator()
+            l.connect(host, 10053, 120, True)
+            yield group.Refresh(l, storage, name).execute()
     except Exception as err:
         log.error(repr(err))
         response.error(-100, "Unable to refresh %s" % err)
