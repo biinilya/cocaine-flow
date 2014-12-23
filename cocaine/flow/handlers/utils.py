@@ -49,7 +49,7 @@ class Status(web.RequestHandler):
         self.registry = "http://%s/_ping" % self.application.registry
 
         registry_cli = AsyncHTTPClient()
-        if self.docker.startswith("unix:"):
+        if self.docker_info.startswith("unix:"):
             docker_cli = AsyncUnixHTTPClient(IOLoop.current(), self.application.docker)
         else:
             docker_cli = registry_cli
