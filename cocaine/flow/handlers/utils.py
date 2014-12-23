@@ -20,6 +20,7 @@
 #
 
 import json
+from urlparse import urlparse
 
 from tornado import web
 from tornado import gen
@@ -46,7 +47,8 @@ class Status(web.RequestHandler):
         }
         # alias
         self.docker_info = "%s/info" % self.application.docker
-        self.registry = "http://%s/_ping" % self.application.registry
+        ro = urlparse(self.application.registry)
+        self.registry = "http://%s/_ping" % ro.netloc
 
         registry_cli = AsyncHTTPClient()
         if self.docker_info.startswith("unix:"):
