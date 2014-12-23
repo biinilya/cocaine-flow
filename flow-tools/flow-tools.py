@@ -47,7 +47,7 @@ VERSION_DELEMITER = "_"
 log = Logger()
 storage = Service("storage")
 locator = Locator()
-
+locator.connect("localhost", 10053, 120, False)
 
 LOGS_NAMESPACE = "flow_upload_logs"
 HOSTS_NAMESPACE = "flow_hosts"
