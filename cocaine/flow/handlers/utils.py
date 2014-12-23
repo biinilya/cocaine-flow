@@ -45,17 +45,17 @@ class Status(web.RequestHandler):
             "status": "unavailable",
         }
         # alias
-        self.docker = "%s/info" % self.application.docker
+        self.docker_info = "%s/info" % self.application.docker
         self.registry = "http://%s/_ping" % self.application.registry
 
         registry_cli = AsyncHTTPClient()
         if self.docker.startswith("unix:"):
-            docker_cli = AsyncUnixHTTPClient(IOLoop.current(), self.docker)
+            docker_cli = AsyncUnixHTTPClient(IOLoop.current(), self.application.docker)
         else:
             docker_cli = registry_cli
 
         # fetch docker status
-        docker_status = docker_cli.fetch(self.docker)
+        docker_status = docker_cli.fetch(self.docker_info)
 
         # fetch registry status
         registry_status = registry_cli.fetch(self.registry)
